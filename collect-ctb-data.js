@@ -2,7 +2,6 @@
 
 const fs = require('fs').promises;
 const path = require('path');
-const { default: fetch } = require('node-fetch');
 
 // API endpoints
 const ROUTES_API = 'https://rt.data.gov.hk/v2/transport/citybus/route/ctb';
@@ -47,68 +46,75 @@ class RateLimiter {
   }
 }
 
-const rateLimiter = new RateLimiter(REQUESTS_PER_SECOND);
-
-async function fetchJson(url) {
-  // Wait for rate limiter
-  await rateLimiter.wait();
-  
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
-  }
-  return await response.json();
-}
-
-async function collectRoutes() {
-  console.log('Collecting CTB routes...');
-  const data = await fetchJson(ROUTES_API);
-  return data.data || [];
-}
-
-async function collectRouteStops(route) {
-  console.log(`Collecting stops for route ${route}...`);
-  try {
-    const [inboundData, outboundData] = await Promise.allSettled([
-      fetchJson(`${ROUTE_STOP_API}/${route}/inbound`),
-      fetchJson(`${ROUTE_STOP_API}/${route}/outbound`)
-    ]);
-    
-    return {
-      route,
-      inbound: inboundData.status === 'fulfilled' ? inboundData.value.data || [] : [],
-      outbound: outboundData.status === 'fulfilled' ? outboundData.value.data || [] : [],
-      error: inboundData.status === 'rejected' || outboundData.status === 'rejected'
-    };
-  } catch (error) {
-    console.error(`Error collecting stops for route ${route}:`, error.message);
-    return { route, inbound: [], outbound: [], error: true };
-  }
-}
-
-async function collectStopDetails(stopId) {
-  console.log(`Collecting details for stop ${stopId}...`);
-  try {
-    const data = await fetchJson(`${STOP_API}/${stopId}`);
-    return { stopId, data: data.data || null, error: false };
-  } catch (error) {
-    console.error(`Error collecting details for stop ${stopId}:`, error.message);
-    return { stopId, data: null, error: true };
-  }
-}
-
-// Process items with a concurrency limit
-async function processWithConcurrency(items, processor, concurrencyLimit) {
-  const results = [];
-  for (let i = 0; i < items.length; i += concurrencyLimit) {
-    const batch = items.slice(i, i + concurrencyLimit);
-    const batchResults = await Promise.allSettled(batch.map(processor));
-    results.push(...batchResults);
-  }
-  return results;
+// Simple delay function
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function main() {
+  // Dynamically import node-fetch
+  const { default: fetch } = await import('node-fetch');
+  const rateLimiter = new RateLimiter(REQUESTS_PER_SECOND);
+  
+  async function fetchJson(url) {
+    // Wait for rate limiter
+    await rateLimiter.wait();
+    
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
+    }
+    return await response.json();
+  }
+
+  // Process items with a concurrency limit
+  async function processWithConcurrency(items, processor, concurrencyLimit) {
+    const results = [];
+    for (let i = 0; i < items.length; i += concurrencyLimit) {
+      const batch = items.slice(i, i + concurrencyLimit);
+      const batchResults = await Promise.allSettled(batch.map(processor));
+      results.push(...batchResults);
+    }
+    return results;
+  }
+
+  async function collectRoutes() {
+    console.log('Collecting CTB routes...');
+    const data = await fetchJson(ROUTES_API);
+    return data.data || [];
+  }
+
+  async function collectRouteStops(route) {
+    console.log(`Collecting stops for route ${route}...`);
+    try {
+      const [inboundData, outboundData] = await Promise.allSettled([
+        fetchJson(`${ROUTE_STOP_API}/${route}/inbound`),
+        fetchJson(`${ROUTE_STOP_API}/${route}/outbound`)
+      ]);
+      
+      return {
+        route,
+        inbound: inboundData.status === 'fulfilled' ? inboundData.value.data || [] : [],
+        outbound: outboundData.status === 'fulfilled' ? outboundData.value.data || [] : [],
+        error: inboundData.status === 'rejected' || outboundData.status === 'rejected'
+      };
+    } catch (error) {
+      console.error(`Error collecting stops for route ${route}:`, error.message);
+      return { route, inbound: [], outbound: [], error: true };
+    }
+  }
+
+  async function collectStopDetails(stopId) {
+    console.log(`Collecting details for stop ${stopId}...`);
+    try {
+      const data = await fetchJson(`${STOP_API}/${stopId}`);
+      return { stopId, data: data.data || null, error: false };
+    } catch (error) {
+      console.error(`Error collecting details for stop ${stopId}:`, error.message);
+      return { stopId, data: null, error: true };
+    }
+  }
+
   try {
     // Step 1: Collect all routes
     const routes = await collectRoutes();
