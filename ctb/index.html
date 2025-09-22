@@ -1,87 +1,173 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HK Transport ETA Data</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            background-color: white;
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
-            border-bottom: 2px solid #007acc;
-            padding-bottom: 10px;
-        }
-        code {
-            background-color: #f1f1f1;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-        }
-        .example {
-            background-color: #f8f8f8;
-            border-left: 4px solid #007acc;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 0 4px 4px 0;
-        }
-        a {
-            color: #007acc;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+          Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        background-color: white;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        border-bottom: 2px solid #007acc;
+        padding-bottom: 10px;
+      }
+      code {
+        background-color: #f1f1f1;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+      }
+      .example {
+        background-color: #f8f8f8;
+        border-left: 4px solid #007acc;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 4px 4px 0;
+      }
+      a {
+        color: #007acc;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>HK Transport ETA Data</h1>
-        <p>This site provides real-time data for Citybus (CTB) routes and stops in Hong Kong, updated daily.</p>
-        
-        <h2>Data Access</h2>
-        <p>All data is available as JSON files. Each stop has its own file named with its stop ID:</p>
-        
-        <div class="example">
-            <p><strong>Format:</strong> <code>https://[username].github.io/MMM-HK-Transport-ETA-Data/[stop_id].json</code></p>
-            <p><strong>Example:</strong> <a href="001001.json">001001.json</a></p>
-        </div>
-        
-        <h2>Data Structure</h2>
-        <p>Each JSON file contains:</p>
-        <ul>
-            <li><code>stop</code> - Stop ID</li>
-            <li><code>name_tc</code> - Traditional Chinese name</li>
-            <li><code>name_en</code> - English name</li>
-            <li><code>lat</code>, <code>long</code> - Coordinates</li>
-            <li><code>name_sc</code> - Simplified Chinese name</li>
-            <li><code>data_timestamp</code> - When the data was collected</li>
-            <li><code>routes</code> - Array of route numbers that serve this stop</li>
-        </ul>
-        
-        <h2>Usage</h2>
-        <p>This data can be used for:</p>
-        <ul>
-            <li>Developing transport apps</li>
-            <li>Creating visualizations</li>
-            <li>Research and analysis</li>
-            <li>Magic Mirror modules (like MMM-HK-Transport-ETA)</li>
-        </ul>
-        
-        <h2>Source</h2>
-        <p>Data is collected from the <a href="https://data.gov.hk/en-data/dataset/hk-td-tis_21-transport-real-time-information-v2">Hong Kong Government's Transport Real-Time Information API</a>.</p>
+      <h1>HK Transport ETA Data</h1>
+      <p>
+        This site provides real-time data for Citybus (CTB) routes and stops in
+        Hong Kong, updated daily.
+      </p>
+
+      <h2>Data Access</h2>
+      <p>
+        All data is available as JSON files in the <code>stops</code> and <code>routes</code> directories:
+      </p>
+
+      <h3>Individual Stops</h3>
+      <div class="example">
+        <p>
+          <strong>Format:</strong>
+          <code
+            >https://[username].github.io/MMM-HK-Transport-ETA-Data/stops/[stop_id].json</code
+          >
+        </p>
+        <p>
+          <strong>Example:</strong>
+          <a href="stops/001001.json">stops/001001.json</a>
+        </p>
+      </div>
+
+      <h3>All Stops</h3>
+      <div class="example">
+        <p>
+          <strong>Complete dataset:</strong>
+          <a href="stops/allstops.json">stops/allstops.json</a>
+        </p>
+      </div>
+
+      <h3>Individual Routes</h3>
+      <div class="example">
+        <p>
+          <strong>Format:</strong>
+          <code
+            >https://[username].github.io/MMM-HK-Transport-ETA-Data/routes/[route].json</code
+          >
+        </p>
+        <p>
+          <strong>Example:</strong>
+          <a href="routes/1.json">routes/1.json</a>
+        </p>
+      </div>
+
+      <h3>All Routes</h3>
+      <div class="example">
+        <p>
+          <strong>Complete dataset:</strong>
+          <a href="routes/allroutes.json">routes/allroutes.json</a>
+        </p>
+      </div>
+
+      <h2>Data Structure</h2>
+      <h3>Stop Files</h3>
+      <p>Each stop JSON file contains:</p>
+      <ul>
+        <li><code>stop</code> - Stop ID</li>
+        <li><code>name_tc</code> - Traditional Chinese name</li>
+        <li><code>name_en</code> - English name</li>
+        <li><code>lat</code>, <code>long</code> - Coordinates</li>
+        <li><code>name_sc</code> - Simplified Chinese name</li>
+        <li><code>data_timestamp</code> - When the data was collected</li>
+        <li>
+          <code>routes</code> - Array of route numbers that serve this stop
+        </li>
+      </ul>
+
+      <h3>Route Files</h3>
+      <p>Each route JSON file contains:</p>
+      <ul>
+        <li><code>route</code> - Route ID</li>
+        <li><code>stops</code> - Array of all stops (both inbound and outbound) with full details</li>
+      </ul>
+      <p>Each stop in the route files includes:</p>
+      <ul>
+        <li><code>co</code> - Company code (CTB)</li>
+        <li><code>route</code> - Route ID</li>
+        <li><code>dir</code> - Direction (I = Inbound, O = Outbound)</li>
+        <li><code>seq</code> - Sequence number</li>
+        <li><code>stop</code> - Stop ID</li>
+        <li><code>data_timestamp</code> - When the data was collected</li>
+        <li><code>name_tc</code> - Traditional Chinese name</li>
+        <li><code>name_en</code> - English name</li>
+        <li><code>name_sc</code> - Simplified Chinese name</li>
+        <li><code>lat</code>, <code>long</code> - Coordinates</li>
+      </ul>
+
+      <h2>Usage</h2>
+      <p>This data can be used for:</p>
+      <ul>
+        <li>Developing transport apps</li>
+        <li>Creating visualizations</li>
+        <li>Research and analysis</li>
+        <li>Magic Mirror modules (like MMM-HK-Transport-ETA)</li>
+      </ul>
+
+      <h2>API Information</h2>
+      <p>
+        The data is collected daily at 5 AM Hong Kong time. The dataset
+        includes:
+      </p>
+      <ul>
+        <li>All CTB bus stops in Hong Kong</li>
+        <li>Geographic coordinates for each stop</li>
+        <li>Route information for each stop</li>
+      </ul>
+
+      <h2>Source</h2>
+      <p>
+        Data is collected from the
+        <a
+          href="https://data.gov.hk/en-data/dataset/hk-td-tis_21-transport-real-time-information-v2"
+          >Hong Kong Government's Transport Real-Time Information API</a
+        >.
+      </p>
     </div>
-</body>
+  </body>
 </html>
