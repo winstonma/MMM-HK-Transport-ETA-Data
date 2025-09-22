@@ -5,6 +5,9 @@ on:
     # Runs at 5 AM every day in Hong Kong time (UTC+8)
     # 5 AM HK = 9 PM previous day UTC
     - cron: '0 21 * * *'
+  push:
+    branches:
+      - main
   workflow_dispatch: # Allows manual triggering
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
