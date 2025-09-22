@@ -1,0 +1,19 @@
+{
+  "name": "mmm-hk-transport-eta-data",
+  "version": "1.0.0",
+  "description": "Collect CTB route and stop data and publish to GitHub Pages",
+  "main": "collect-ctb-data.js",
+  "scripts": {
+    "collect-data": "node collect-ctb-data.js"
+  },
+  "keywords": ["transport", "hong-kong", "citybus", "ctb"],
+  "author": "MMM-HK-Transport-ETA-Data",
+  "license": "MIT",
+  "packageManager": "pnpm@8.6.0",
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
