@@ -14,6 +14,7 @@ This repository collects Citybus (CTB) route and stop data from the Hong Kong go
 The collected data is available at: `https://[username].github.io/MMM-HK-Transport-ETA-Data/`
 
 Each stop's data is available as a separate JSON file named with its stop ID:
+
 - `https://[username].github.io/MMM-HK-Transport-ETA-Data/001001.json`
 - `https://[username].github.io/MMM-HK-Transport-ETA-Data/001002.json`
 - etc.

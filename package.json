@@ -4,14 +4,24 @@
   "description": "Collect CTB route and stop data and publish to GitHub Pages",
   "main": "collect-ctb-data.js",
   "scripts": {
-    "collect-data": "node collect-ctb-data.js"
+    "collect-data": "node collect-ctb-data.js",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
-  "keywords": ["transport", "hong-kong", "citybus", "ctb"],
+  "keywords": [
+    "transport",
+    "hong-kong",
+    "citybus",
+    "ctb"
+  ],
   "author": "MMM-HK-Transport-ETA-Data",
   "license": "MIT",
   "packageManager": "pnpm@8.6.0",
   "dependencies": {
     "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
   },
   "engines": {
     "node": ">=18.0.0"
