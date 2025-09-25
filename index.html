@@ -1,414 +1,543 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hong Kong CTB Transport Data API</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hong Kong CTB & KMB Transport Data API</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 3rem;
-        }
-        
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+          Cantarell, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .header {
+        text-align: center;
+        color: white;
+        margin-bottom: 3rem;
+      }
+
+      .header h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .header p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+      }
+
+      .card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+      }
+
+      .card h2 {
+        color: #4a5568;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .endpoint {
+        background: #f7fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+
+      .endpoint-url {
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        background: #2d3748;
+        color: #68d391;
+        padding: 0.5rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        word-break: break-all;
+        margin: 0.5rem 0;
+      }
+
+      .badge {
+        display: inline-block;
+        background: #4299e1;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin-right: 0.5rem;
+      }
+
+      .stats {
+        display: flex;
+        justify-content: space-around;
+        text-align: center;
+        margin: 2rem 0;
+      }
+
+      .stat {
+        flex: 1;
+      }
+
+      .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #4299e1;
+      }
+
+      .stat-label {
+        color: #718096;
+        font-size: 0.9rem;
+      }
+
+      .example {
+        background: #edf2f7;
+        border-left: 4px solid #4299e1;
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+
+      .btn {
+        display: inline-block;
+        background: #4299e1;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: background 0.3s ease;
+        margin: 0.5rem 0.5rem 0.5rem 0;
+      }
+
+      .btn:hover {
+        background: #3182ce;
+      }
+
+      .btn-secondary {
+        background: #718096;
+      }
+
+      .btn-secondary:hover {
+        background: #4a5568;
+      }
+
+      .footer {
+        text-align: center;
+        color: white;
+        margin-top: 3rem;
+        opacity: 0.8;
+      }
+
+      .update-time {
+        background: #48bb78;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        display: inline-block;
+        margin: 1rem 0;
+      }
+
+      @media (max-width: 768px) {
         .header h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+          font-size: 2rem;
         }
-        
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
+
+        .container {
+          padding: 1rem;
         }
-        
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .card h2 {
-            color: #4a5568;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .endpoint {
-            background: #f7fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem 0;
-        }
-        
-        .endpoint-url {
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            background: #2d3748;
-            color: #68d391;
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            word-break: break-all;
-            margin: 0.5rem 0;
-        }
-        
-        .badge {
-            display: inline-block;
-            background: #4299e1;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin-right: 0.5rem;
-        }
-        
+
         .stats {
-            display: flex;
-            justify-content: space-around;
-            text-align: center;
-            margin: 2rem 0;
+          flex-direction: column;
+          gap: 1rem;
         }
-        
-        .stat {
-            flex: 1;
-        }
-        
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #4299e1;
-        }
-        
-        .stat-label {
-            color: #718096;
-            font-size: 0.9rem;
-        }
-        
-        .example {
-            background: #edf2f7;
-            border-left: 4px solid #4299e1;
-            padding: 1rem;
-            margin: 1rem 0;
-        }
-        
-        .btn {
-            display: inline-block;
-            background: #4299e1;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: background 0.3s ease;
-            margin: 0.5rem 0.5rem 0.5rem 0;
-        }
-        
-        .btn:hover {
-            background: #3182ce;
-        }
-        
-        .btn-secondary {
-            background: #718096;
-        }
-        
-        .btn-secondary:hover {
-            background: #4a5568;
-        }
-        
-        .footer {
-            text-align: center;
-            color: white;
-            margin-top: 3rem;
-            opacity: 0.8;
-        }
-        
-        .update-time {
-            background: #48bb78;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            display: inline-block;
-            margin: 1rem 0;
-        }
-        
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .container {
-                padding: 1rem;
-            }
-            
-            .stats {
-                flex-direction: column;
-                gap: 1rem;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="header">
-            <h1>🚌 Hong Kong CTB Data API</h1>
-            <p>Real-time Citybus route and stop information for developers</p>
-            <div class="update-time" id="updateTime">
-                ⏰ Updated daily at 5:00 AM HKT
+      <div class="header">
+        <h1>🚌 Hong Kong CTB & KMB Data API</h1>
+        <p>Real-time Citybus & KMB route and stop information for developers</p>
+        <div class="update-time" id="updateTime">
+          ⏰ Updated daily at 5:00 AM HKT
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h2>📊 API Overview</h2>
+          <p>
+            This API provides comprehensive Citybus (CTB) and KMB (九巴) route
+            and stop data for Hong Kong, automatically updated daily from
+            official government sources.
+          </p>
+
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-number" id="routeCount">4,000+</div>
+              <div class="stat-label">Routes</div>
             </div>
+            <div class="stat">
+              <div class="stat-number" id="stopCount">13,000+</div>
+              <div class="stat-label">Stops</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number">24/7</div>
+              <div class="stat-label">Available</div>
+            </div>
+          </div>
         </div>
 
-        <div class="grid">
-            <div class="card">
-                <h2>📊 API Overview</h2>
-                <p>This API provides comprehensive Citybus (CTB) route and stop data for Hong Kong, automatically updated daily from official government sources.</p>
-                
-                <div class="stats">
-                    <div class="stat">
-                        <div class="stat-number" id="routeCount">395</div>
-                        <div class="stat-label">Routes</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number" id="stopCount">2,565</div>
-                        <div class="stat-label">Stops</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number">24/7</div>
-                        <div class="stat-label">Available</div>
-                    </div>
-                </div>
-            </div>
+        <div class="card">
+          <h2>🚏 CTB Stop Data</h2>
+          <p>
+            Get detailed information about individual CTB bus stops including
+            coordinates, names in multiple languages, and serving routes.
+          </p>
 
-            <div class="card">
-                <h2>🚏 Stop Data</h2>
-                <p>Get detailed information about individual bus stops including coordinates, names in multiple languages, and serving routes.</p>
-                
-                <div class="endpoint">
-                    <span class="badge">GET</span>Individual Stop
-                    <div class="endpoint-url">
-                        /ctb/stops/{stop_id}.json
-                    </div>
-                </div>
-                
-                <div class="endpoint">
-                    <span class="badge">GET</span>All Stops
-                    <div class="endpoint-url">
-                        /ctb/stops/allstops.json
-                    </div>
-                </div>
-                
-                <div class="example">
-                    <strong>Example:</strong> Stop 001001 (Central)
-                    <div class="endpoint-url">
-                        /ctb/stops/001001.json
-                    </div>
-                </div>
-                
-                <a href="ctb/stops/001001.json" class="btn" target="_blank">View Example</a>
-                <a href="ctb/stops/allstops.json" class="btn btn-secondary" target="_blank">All Stops</a>
-            </div>
+          <div class="endpoint">
+            <span class="badge">GET</span>Individual CTB Stop
+            <div class="endpoint-url">/ctb/stops/{stop_id}.json</div>
+          </div>
 
-            <div class="card">
-                <h2>🛣️ Route Data</h2>
-                <p>Access route information including stop sequences, directions, and complete route details for all CTB services.</p>
-                
-                <div class="endpoint">
-                    <span class="badge">GET</span>Individual Route
-                    <div class="endpoint-url">
-                        /ctb/routes/{route_id}.json
-                    </div>
-                </div>
-                
-                <div class="endpoint">
-                    <span class="badge">GET</span>All Routes
-                    <div class="endpoint-url">
-                        /ctb/routes/allroutes.json
-                    </div>
-                </div>
-                
-                <div class="example">
-                    <strong>Example:</strong> Route 12 (Central - Mid-Levels)
-                    <div class="endpoint-url">
-                        /ctb/routes/12.json
-                    </div>
-                </div>
-                
-                <a href="ctb/routes/12.json" class="btn" target="_blank">View Example</a>
-                <a href="ctb/routes/allroutes.json" class="btn btn-secondary" target="_blank">All Routes</a>
-            </div>
+          <div class="endpoint">
+            <span class="badge">GET</span>CTB All Stops
+            <div class="endpoint-url">/ctb/stops/allstops.json</div>
+          </div>
 
-            <div class="card">
-                <h2>💻 Usage Examples</h2>
-                <p>Simple examples to get you started with the API:</p>
-                
-                <div class="example">
-                    <strong>JavaScript (Fetch API):</strong>
-                    <pre><code>fetch('/ctb/stops/001001.json')
+          <div class="example">
+            <strong>Example:</strong> CTB Stop 001001 (Central)
+            <div class="endpoint-url">/ctb/stops/001001.json</div>
+          </div>
+
+          <a href="ctb/stops/001001.json" class="btn" target="_blank"
+            >View CTB Example</a
+          >
+          <a
+            href="ctb/stops/allstops.json"
+            class="btn btn-secondary"
+            target="_blank"
+            >All CTB Stops</a
+          >
+        </div>
+
+        <div class="card">
+          <h2>🚌 KMB Stop Data</h2>
+          <p>
+            Get detailed information about individual KMB bus stops including
+            coordinates, names in multiple languages, and serving routes.
+          </p>
+
+          <div class="endpoint">
+            <span class="badge">GET</span>Individual KMB Stop
+            <div class="endpoint-url">/kmb/stops/{stop_id}.json</div>
+          </div>
+
+          <div class="endpoint">
+            <span class="badge">GET</span>KMB All Stops
+            <div class="endpoint-url">/kmb/stops/allstops.json</div>
+          </div>
+
+          <div class="example">
+            <strong>Example:</strong> KMB Stop 00040ED8B61CA94B (Yau Ma Tei)
+            <div class="endpoint-url">/kmb/stops/00040ED8B61CA94B.json</div>
+          </div>
+
+          <a href="kmb/stops/00040ED8B61CA94B.json" class="btn" target="_blank"
+            >View KMB Example</a
+          >
+          <a
+            href="kmb/stops/allstops.json"
+            class="btn btn-secondary"
+            target="_blank"
+            >All KMB Stops</a
+          >
+        </div>
+
+        <div class="card">
+          <h2>🛣️ Route Data</h2>
+          <p>
+            Access route information including stop sequences, directions, and
+            complete route details for all CTB and KMB services.
+          </p>
+
+          <div class="endpoint">
+            <span class="badge">GET</span>Individual CTB Route
+            <div class="endpoint-url">/ctb/routes/{route_id}.json</div>
+          </div>
+
+          <div class="endpoint">
+            <span class="badge">GET</span>CTB All Routes
+            <div class="endpoint-url">/ctb/routes/allroutes.json</div>
+          </div>
+
+          <div class="endpoint">
+            <span class="badge">GET</span>Individual KMB Route
+            <div class="endpoint-url">/kmb/routes/{route_id}.json</div>
+          </div>
+
+          <div class="endpoint">
+            <span class="badge">GET</span>KMB All Routes
+            <div class="endpoint-url">/kmb/routes/allroutes.json</div>
+          </div>
+
+          <div class="example">
+            <strong>Example:</strong> CTB Route 12 (Central - Mid-Levels)
+            <div class="endpoint-url">/ctb/routes/12.json</div>
+          </div>
+
+          <div class="example">
+            <strong>Example:</strong> KMB Route 1A (Kowloon - Happy Valley)
+            <div class="endpoint-url">/kmb/routes/1A.json</div>
+          </div>
+
+          <a href="ctb/routes/12.json" class="btn" target="_blank"
+            >View CTB Route</a
+          >
+          <a href="kmb/routes/1A.json" class="btn" target="_blank"
+            >View KMB Route</a
+          >
+          <a
+            href="ctb/routes/allroutes.json"
+            class="btn btn-secondary"
+            target="_blank"
+            >All CTB Routes</a
+          >
+          <a
+            href="kmb/routes/allroutes.json"
+            class="btn btn-secondary"
+            target="_blank"
+            >All KMB Routes</a
+          >
+        </div>
+
+        <div class="card">
+          <h2>💻 Usage Examples</h2>
+          <p>Simple examples to get you started with the API:</p>
+
+          <div class="example">
+            <strong>JavaScript (Fetch API):</strong>
+            <pre><code>fetch('https://winstonma.github.io/MMM-HK-Transport-ETA-Data/ctb/stops/001001.json')
   .then(response => response.json())
   .then(data => console.log(data));</code></pre>
-                </div>
-                
-                <div class="example">
-                    <strong>Python (requests):</strong>
-                    <pre><code>import requests
+          </div>
+
+          <div class="example">
+            <strong>Python (requests):</strong>
+            <pre><code>import requests
 url = 'https://winstonma.github.io/MMM-HK-Transport-ETA-Data/ctb/stops/001001.json'
 response = requests.get(url)
 data = response.json()</code></pre>
-                </div>
-                
-                <div class="example">
-                    <strong>curl:</strong>
-                    <pre><code>curl -X GET \
+          </div>
+
+          <div class="example">
+            <strong>curl:</strong>
+            <pre><code>curl -X GET \\
   'https://winstonma.github.io/MMM-HK-Transport-ETA-Data/ctb/stops/001001.json'</code></pre>
-                </div>
-            </div>
+          </div>
+        </div>
 
-            <div class="card">
-                <h2>📋 Data Structure</h2>
-                <p>Understanding the JSON response format:</p>
-                
-                <div class="example">
-                    <strong>Stop Data Example:</strong>
-                    <pre><code>{
-  "stop": "001001",
-  "name_tc": "中央廣場, 亞畢諾道",
-  "name_en": "The Centrium, Arbuthnot Road",
-  "name_sc": "中央广场, 亚毕诺道",
-  "lat": "22.279916732091",
-  "long": "114.15458450053",
-  "data_timestamp": "2025-09-23T05:00:02+08:00",
-  "routes": ["12", "12M", "13"]
+        <div class="card">
+          <h2>📋 Data Structure</h2>
+          <p>Understanding the JSON response format:</p>
+
+          <div class="example">
+            <strong>Stop Data Example with Nearby Stops:</strong>
+            <pre><code>{
+  "stop": "00115688D89603F9",
+  "name_en": "THE FAMILY PLANNING ASSOCIATION OF HK (YL221)",
+  "name_tc": "香港家庭計劃指導會 (YL221)",
+  "name_sc": "香港家庭计划指导会 (YL221)",
+  "lat": "22.445861",
+  "long": "114.022618",
+  "routes": ["A36"],
+  "data_timestamp": "2025-09-25T05:15:00.368Z",
+  "nearbyStopIDs": ["0D98A0E934584FD0"]
 }</code></pre>
-                </div>
-                
-                <h3>Field Descriptions:</h3>
-                <ul style="margin: 1rem 0; padding-left: 2rem;">
-                    <li><strong>stop:</strong> Unique stop identifier</li>
-                    <li><strong>name_tc/en/sc:</strong> Stop names in Traditional Chinese, English, Simplified Chinese</li>
-                    <li><strong>lat/long:</strong> GPS coordinates</li>
-                    <li><strong>routes:</strong> Array of route numbers serving this stop</li>
-                    <li><strong>data_timestamp:</strong> Last update time</li>
-                </ul>
-            </div>
+          </div>
 
-            <div class="card">
-                <h2>🔄 Update Schedule</h2>
-                <p>Data freshness and reliability information:</p>
-                
-                <ul style="margin: 1rem 0; padding-left: 2rem;">
-                    <li>📅 <strong>Daily Updates:</strong> Every day at 5:00 AM Hong Kong Time</li>
-                    <li>🔄 <strong>Automatic Sync:</strong> Data sourced from official HK government APIs</li>
-                    <li>⚡ <strong>Fast CDN:</strong> Served via GitHub Pages global CDN</li>
-                    <li>📊 <strong>No Rate Limits:</strong> Free access for all developers</li>
-                    <li>🔒 <strong>HTTPS Only:</strong> Secure connections required</li>
-                </ul>
-                
-                <div class="example">
-                    <strong>CORS Enabled:</strong> Safe to use from web browsers
-                </div>
-            </div>
+          <h3>Field Descriptions:</h3>
+          <ul style="margin: 1rem 0; padding-left: 2rem">
+            <li><strong>stop:</strong> Unique stop identifier</li>
+            <li>
+              <strong>name_tc/en/sc:</strong> Stop names in Traditional Chinese,
+              English, Simplified Chinese
+            </li>
+            <li><strong>lat/long:</strong> GPS coordinates</li>
+            <li>
+              <strong>routes:</strong> Array of route numbers serving this stop
+            </li>
+            <li>
+              <strong>nearbyStopIDs:</strong> Array of stop IDs at the same
+              coordinates
+            </li>
+            <li><strong>data_timestamp:</strong> Last update time</li>
+          </ul>
         </div>
 
-        <div class="footer">
-            <p>🚌 Built for Hong Kong developers • Data from Transport Department • Updated automatically via GitHub Actions</p>
-            <p style="margin-top: 0.5rem;">
-                <a href="https://github.com/winstonma/MMM-HK-Transport-ETA-Data" style="color: white;">View on GitHub</a>
-            </p>
+        <div class="card">
+          <h2>🔄 Update Schedule</h2>
+          <p>Data freshness and reliability information:</p>
+
+          <ul style="margin: 1rem 0; padding-left: 2rem">
+            <li>
+              📅 <strong>Daily Updates:</strong> Every day at 5:00 AM Hong Kong
+              Time
+            </li>
+            <li>
+              🔄 <strong>Automatic Sync:</strong> Data sourced from official HK
+              government APIs
+            </li>
+            <li>
+              ⚡ <strong>Fast CDN:</strong> Served via GitHub Pages global CDN
+            </li>
+            <li>
+              📊 <strong>No Rate Limits:</strong> Free access for all developers
+            </li>
+            <li>🔒 <strong>HTTPS Only:</strong> Secure connections required</li>
+          </ul>
+
+          <div class="example">
+            <strong>CORS Enabled:</strong> Safe to use from web browsers
+          </div>
         </div>
+      </div>
+
+      <div class="footer">
+        <p>
+          🚌 Built for Hong Kong developers • Data from Transport Department •
+          Updated automatically via GitHub Actions
+        </p>
+        <p style="margin-top: 0.5rem">
+          <a
+            href="https://github.com/winstonma/MMM-HK-Transport-ETA-Data"
+            style="color: white"
+            >View on GitHub</a
+          >
+        </p>
+      </div>
     </div>
 
     <script>
-        // Update the current time display
-        function updateTime() {
-            const now = new Date();
-            const hkTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Hong_Kong"}));
-            const timeString = hkTime.toLocaleString('en-HK', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                timeZone: 'Asia/Hong_Kong'
-            });
-            
-            // Calculate next update time (5 AM HKT)
-            const nextUpdate = new Date(hkTime);
-            nextUpdate.setHours(5, 0, 0, 0);
-            if (hkTime.getHours() >= 5) {
-                nextUpdate.setDate(nextUpdate.getDate() + 1);
-            }
-            
-            const timeUntilUpdate = nextUpdate - hkTime;
-            const hoursUntil = Math.floor(timeUntilUpdate / (1000 * 60 * 60));
-            const minutesUntil = Math.floor((timeUntilUpdate % (1000 * 60 * 60)) / (1000 * 60));
-            
-            document.getElementById('updateTime').innerHTML = 
-                `⏰ Next update in ${hoursUntil}h ${minutesUntil}m (Daily at 5:00 AM HKT)`;
+      // Update the current time display
+      function updateTime() {
+        const now = new Date();
+        const hkTime = new Date(
+          now.toLocaleString('en-US', { timeZone: 'Asia/Hong_Kong' })
+        );
+        const timeString = hkTime.toLocaleString('en-HK', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: 'Asia/Hong_Kong',
+        });
+
+        // Calculate next update time (5 AM HKT)
+        const nextUpdate = new Date(hkTime);
+        nextUpdate.setHours(5, 0, 0, 0);
+        if (hkTime.getHours() >= 5) {
+          nextUpdate.setDate(nextUpdate.getDate() + 1);
         }
-        
-        // Try to fetch actual counts from the API
-        async function updateStats() {
-            try {
-                const [stopsResponse, routesResponse] = await Promise.allSettled([
-                    fetch('/ctb/stops/allstops.json'),
-                    fetch('/ctb/routes/allroutes.json')
-                ]);
-                
-                if (stopsResponse.status === 'fulfilled') {
-                    const stopsData = await stopsResponse.value.json();
-                    const stopCount = Object.keys(stopsData).length;
-                    document.getElementById('stopCount').textContent = stopCount.toLocaleString();
-                }
-                
-                if (routesResponse.status === 'fulfilled') {
-                    const routesData = await routesResponse.value.json();
-                    const routeCount = Object.keys(routesData).length;
-                    document.getElementById('routeCount').textContent = routeCount.toLocaleString();
-                }
-            } catch (error) {
-                console.log('Using default stats (API data not yet available)');
-            }
+
+        const timeUntilUpdate = nextUpdate - hkTime;
+        const hoursUntil = Math.floor(timeUntilUpdate / (1000 * 60 * 60));
+        const minutesUntil = Math.floor(
+          (timeUntilUpdate % (1000 * 60 * 60)) / (1000 * 60)
+        );
+
+        document.getElementById('updateTime').innerHTML =
+          `⏰ Next update in \${hoursUntil}h \${minutesUntil}m (Daily at 5:00 AM HKT)`;
+      }
+
+      // Try to fetch actual counts from the API
+      async function updateStats() {
+        try {
+          const [
+            ctbStopsResponse,
+            kmbStopsResponse,
+            ctbRoutesResponse,
+            kmbRoutesResponse,
+          ] = await Promise.allSettled([
+            fetch('/ctb/stops/allstops.json'),
+            fetch('/kmb/stops/allstops.json'),
+            fetch('/ctb/routes/allroutes.json'),
+            fetch('/kmb/routes/allroutes.json'),
+          ]);
+
+          let totalStops = 0;
+          let totalRoutes = 0;
+
+          if (ctbStopsResponse.status === 'fulfilled') {
+            const ctbStopsData = await ctbStopsResponse.value.json();
+            totalStops += Object.keys(ctbStopsData).length;
+          }
+
+          if (kmbStopsResponse.status === 'fulfilled') {
+            const kmbStopsData = await kmbStopsResponse.value.json();
+            totalStops += Object.keys(kmbStopsData).length;
+          }
+
+          if (ctbRoutesResponse.status === 'fulfilled') {
+            const ctbRoutesData = await ctbRoutesResponse.value.json();
+            totalRoutes += Object.keys(ctbRoutesData).length;
+          }
+
+          if (kmbRoutesResponse.status === 'fulfilled') {
+            const kmbRoutesData = await kmbRoutesResponse.value.json();
+            totalRoutes += Object.keys(kmbRoutesData).length;
+          }
+
+          if (totalStops > 0) {
+            document.getElementById('stopCount').textContent =
+              totalStops.toLocaleString();
+          }
+          if (totalRoutes > 0) {
+            document.getElementById('routeCount').textContent =
+              totalRoutes.toLocaleString();
+          }
+        } catch (error) {
+          console.log('Using default stats (API data not yet available)');
         }
-        
-        // Initialize
-        updateTime();
-        updateStats();
-        
-        // Update time every minute
-        setInterval(updateTime, 60000);
+      }
+
+      // Initialize
+      updateTime();
+      updateStats();
+
+      // Update time every minute
+      setInterval(updateTime, 60000);
     </script>
-</body>
+  </body>
 </html>

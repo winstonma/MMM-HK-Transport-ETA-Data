@@ -1,24 +1,24 @@
 #!/usr/bin/env node
 
-const { CTBService } = require('./lib/ctb-service');
+const { KMBService } = require('./lib/kmb-service');
 const config = require('./config/default');
 
 async function main() {
   try {
-    const ctbService = new CTBService({
+    const kmbService = new KMBService({
       requestsPerSecond: config.api.requestsPerSecond,
       concurrentRequests: config.api.concurrentRequests,
-      baseDir: config.output.baseDir,
+      baseDir: 'kmb', // Set base directory to 'kmb'
     });
 
-    const result = await ctbService.collectAndSaveData();
+    const result = await kmbService.collectAndSaveData();
 
     if (!result.success) {
-      console.error('Data collection failed:', result.error);
+      console.error('KMB data collection failed:', result.error);
       process.exit(1);
     }
   } catch (error) {
-    console.error('Error in main process:', error);
+    console.error('Error in KMB main process:', error);
     process.exit(1);
   }
 }
