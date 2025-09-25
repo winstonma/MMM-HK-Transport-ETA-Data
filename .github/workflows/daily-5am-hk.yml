@@ -42,7 +42,7 @@ jobs:
         run: |
           pnpm install
           
-      - name: Run CTB data collection
+      - name: Run CTB & KMB data collection
         run: |
           pnpm collect-data
           
