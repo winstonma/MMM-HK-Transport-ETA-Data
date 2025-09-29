@@ -32,11 +32,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
+          cache: 'pnpm'
           
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: latest
       
       - name: Install dependencies
         run: |
@@ -44,15 +43,35 @@ jobs:
           
       - name: Run CTB & KMB data collection
         run: |
+          echo "Starting data collection at $(date)"
           pnpm collect-data
+          echo "Data collection completed at $(date)"
+          
+      - name: Verify data collection
+        run: |
+          echo "Verifying collected data..."
+          if [ -d "ctb/stops" ]; then
+            echo "CTB stops count: $(find ctb/stops/ -name "*.json" 2>/dev/null | wc -l)"
+          fi
+          if [ -d "kmb/stops" ]; then
+            echo "KMB stops count: $(find kmb/stops/ -name "*.json" 2>/dev/null | wc -l)"
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
+        
+      - name: Create deployment directory
+        run: |
+          mkdir -p deploy
+          cp -r ctb/ deploy/ 2>/dev/null || echo "CTB directory not found"
+          cp -r kmb/ deploy/ 2>/dev/null || echo "KMB directory not found"
+          cp index.html deploy/ 2>/dev/null || echo "index.html not found"
+          cp README.md deploy/ 2>/dev/null || echo "README.md not found"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./
+          path: ./deploy
 
       - name: Deploy to GitHub Pages
         id: deployment
