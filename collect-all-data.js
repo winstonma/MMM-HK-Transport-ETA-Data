@@ -29,11 +29,15 @@ async function main() {
         }
         process.exit(1);
       }
-      
+
       const data = result.unwrap();
-      console.log(`${name} Summary: ${data.successfulStops}/${data.totalStops} stops processed`);
+      console.log(
+        `${name} Summary: ${data.successfulStops}/${data.totalStops} stops processed`
+      );
       if (data.saveErrors > 0) {
-        console.warn(`${name} Warning: ${data.saveErrors} file save errors occurred`);
+        console.warn(
+          `${name} Warning: ${data.saveErrors} file save errors occurred`
+        );
       }
     } catch (error) {
       console.error(`Error in ${name} collection:`, error);

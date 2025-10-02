@@ -21,9 +21,11 @@ async function main() {
       }
       process.exit(1);
     }
-    
+
     const data = result.unwrap();
-    console.log(`\nSummary: ${data.successfulStops}/${data.totalStops} stops processed successfully`);
+    console.log(
+      `\nSummary: ${data.successfulStops}/${data.totalStops} stops processed successfully`
+    );
     if (data.saveErrors > 0) {
       console.warn(`Warning: ${data.saveErrors} file save errors occurred`);
     }
