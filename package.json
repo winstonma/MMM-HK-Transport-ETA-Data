@@ -4,9 +4,9 @@
   "description": "Collect CTB route and stop data and publish to GitHub Pages",
   "main": "collect-ctb-data.js",
   "scripts": {
-    "collect-data": "node collect-ctb-data.js && node collect-kmb-data.js",
-    "collect-ctb": "node collect-ctb-data.js",
-    "collect-kmb": "node collect-kmb-data.js",
+    "collect": "node collect-all-data.js",
+    "collect:ctb": "node collect-ctb-data.js",
+    "collect:kmb": "node collect-kmb-data.js",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
