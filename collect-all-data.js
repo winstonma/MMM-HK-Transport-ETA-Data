@@ -7,7 +7,7 @@ const config = require('./config/default');
 async function main() {
   const services = [
     { name: 'CTB', Service: CTBService, baseDir: config.output.baseDir },
-    { name: 'KMB', Service: KMBService, baseDir: 'kmb' }
+    { name: 'KMB', Service: KMBService, baseDir: 'kmb' },
   ];
 
   for (const { name, Service, baseDir } of services) {
@@ -16,11 +16,11 @@ async function main() {
       const service = new Service({
         requestsPerSecond: config.api.requestsPerSecond,
         concurrentRequests: config.api.concurrentRequests,
-        baseDir
+        baseDir,
       });
 
       const result = await service.collectAndSaveData();
-      
+
       if (!result.success) {
         console.error(`${name} data collection failed:`, result.error);
         process.exit(1);
@@ -30,7 +30,7 @@ async function main() {
       process.exit(1);
     }
   }
-  
+
   console.log('\n✓ All data collected successfully');
 }
 
