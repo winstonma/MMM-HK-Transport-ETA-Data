@@ -1,28 +1,35 @@
+const { ConfigLoader } = require('../lib/config-loader');
+
+// Load and validate configuration
+const config = ConfigLoader.loadConfig();
+
+// Export with backward compatibility for CTB-specific access
 module.exports = {
-  api: {
-    requestsPerSecond: parseInt(process.env.REQUESTS_PER_SECOND) || 3,
-    concurrentRequests: parseInt(process.env.CONCURRENT_REQUESTS) || 2,
-    timeout: parseInt(process.env.API_TIMEOUT) || 30000,
-    endpoints: {
-      routes:
-        process.env.ROUTES_API ||
-        'https://rt.data.gov.hk/v2/transport/citybus/route/ctb',
-      routeStop:
-        process.env.ROUTE_STOP_API ||
-        'https://rt.data.gov.hk/v2/transport/citybus/route-stop/ctb',
-      stop:
-        process.env.STOP_API ||
-        'https://rt.data.gov.hk/v2/transport/citybus/stop',
+    api: {
+        requestsPerSecond: config.api.requestsPerSecond,
+        concurrentRequests: config.api.concurrentRequests,
+        timeout: config.api.timeout,
+        retryLimit: config.api.retryLimit,
+        // Maintain backward compatibility with old endpoint structure
+        endpoints: {
+            routes: config.api.endpoints.ctb.routes,
+            routeStop: config.api.endpoints.ctb.routeStop,
+            stop: config.api.endpoints.ctb.stop,
+        },
+        // New structured endpoints
+        ctb: config.api.endpoints.ctb,
+        kmb: config.api.endpoints.kmb,
     },
-  },
-  cache: {
-    dir: process.env.CACHE_DIR || '.cache',
-    ttl: parseInt(process.env.CACHE_TTL) || 24 * 60 * 60 * 1000, // 24 hours in milliseconds
-    enabled: process.env.ENABLE_API_CACHE !== 'false', // Enable by default
-  },
-  output: {
-    baseDir: process.env.OUTPUT_DIR || 'ctb',
-    stopsDir: 'stops',
-    routesDir: 'routes',
-  },
+    cache: config.cache,
+    output: {
+        // Maintain backward compatibility
+        baseDir: config.output.ctb.baseDir,
+        stopsDir: config.output.ctb.stopsDir,
+        routesDir: config.output.ctb.routesDir,
+        // New structured output
+        ctb: config.output.ctb,
+        kmb: config.output.kmb,
+    },
+    githubPages: config.githubPages,
+    environment: config.environment,
 };
