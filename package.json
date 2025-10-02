@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Collect CTB route and stop data and publish to GitHub Pages",
   "main": "collect-ctb-data.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "collect": "node collect-all-data.js",
     "collect:ctb": "node collect-ctb-data.js",
