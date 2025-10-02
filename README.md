@@ -75,7 +75,7 @@ The data will then be automatically published to your GitHub Pages site after ea
 
 You can run the data collection scripts locally:
 
-- `pnpm collect-data` - Collects both CTB and KMB data
+- `pnpm collect` - Collects both CTB and KMB data
 - `pnpm collect-ctb` - Collects only CTB data
 - `pnpm collect-kmb` - Collects only KMB data
 - `pnpm format` - Formats all code files

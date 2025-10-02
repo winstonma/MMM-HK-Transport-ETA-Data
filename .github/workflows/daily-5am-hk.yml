@@ -43,7 +43,7 @@ jobs:
       - name: Run CTB & KMB data collection
         run: |
           echo "Starting data collection at $(date)"
-          pnpm collect-data
+          pnpm collect
           echo "Data collection completed at $(date)"
           
       - name: Verify data collection
