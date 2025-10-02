@@ -13,9 +13,19 @@ async function main() {
 
     const result = await kmbService.collectAndSaveData();
 
-    if (!result.success) {
-      console.error('KMB data collection failed:', result.error);
+    if (result.isFailure()) {
+      const error = result.getError();
+      console.error('KMB data collection failed:', error.message);
+      if (error.details) {
+        console.error('Details:', error.details);
+      }
       process.exit(1);
+    }
+    
+    const data = result.unwrap();
+    console.log(`\nSummary: ${data.successfulStops}/${data.totalStops} stops processed successfully`);
+    if (data.saveErrors > 0) {
+      console.warn(`Warning: ${data.saveErrors} file save errors occurred`);
     }
   } catch (error) {
     console.error('Error in KMB main process:', error);

@@ -21,9 +21,19 @@ async function main() {
 
       const result = await service.collectAndSaveData();
 
-      if (!result.success) {
-        console.error(`${name} data collection failed:`, result.error);
+      if (result.isFailure()) {
+        const error = result.getError();
+        console.error(`${name} data collection failed:`, error.message);
+        if (error.details) {
+          console.error('Details:', error.details);
+        }
         process.exit(1);
+      }
+      
+      const data = result.unwrap();
+      console.log(`${name} Summary: ${data.successfulStops}/${data.totalStops} stops processed`);
+      if (data.saveErrors > 0) {
+        console.warn(`${name} Warning: ${data.saveErrors} file save errors occurred`);
       }
     } catch (error) {
       console.error(`Error in ${name} collection:`, error);
