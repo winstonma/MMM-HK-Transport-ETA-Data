@@ -8,6 +8,7 @@
     "collect": "node collect-all-data.js",
     "collect:ctb": "node collect-ctb-data.js",
     "collect:kmb": "node collect-kmb-data.js",
+    "test:cache": "node scripts/test-cache.js",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -30,6 +31,8 @@
   "homepage": "https://mmm-hk-transport-eta-data.github.io/mmm-hk-transport-eta-data/",
   "packageManager": "pnpm@10.17.1",
   "dependencies": {
+    "keyv": "^5.1.0",
+    "keyv-file": "^0.3.1",
     "ky": "^1.11.0",
     "ora": "^5.4.1",
     "p-throttle": "^8.0.0"
