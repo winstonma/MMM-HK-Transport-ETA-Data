@@ -15,6 +15,11 @@ module.exports = {
         'https://rt.data.gov.hk/v2/transport/citybus/stop',
     },
   },
+  cache: {
+    dir: process.env.CACHE_DIR || '.cache',
+    ttl: parseInt(process.env.CACHE_TTL) || 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+    enabled: process.env.ENABLE_API_CACHE !== 'false', // Enable by default
+  },
   output: {
     baseDir: process.env.OUTPUT_DIR || 'ctb',
     stopsDir: 'stops',
