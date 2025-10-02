@@ -29,7 +29,6 @@
   "homepage": "https://mmm-hk-transport-eta-data.github.io/mmm-hk-transport-eta-data/",
   "packageManager": "pnpm@10.17.1",
   "dependencies": {
-    "dotenv": "^17.2.2",
     "fs-extra": "^11.3.2",
     "ky": "^1.11.0",
     "ora": "^5.4.1",

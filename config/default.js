@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 module.exports = {
   api: {
     requestsPerSecond: parseInt(process.env.REQUESTS_PER_SECOND) || 3,
