@@ -8,6 +8,9 @@
     "collect": "node collect-all-data.js",
     "collect:ctb": "node collect-ctb-data.js",
     "collect:kmb": "node collect-kmb-data.js",
+    "cache:clear": "node scripts/cache-manager.js clear",
+    "cache:info": "node scripts/cache-manager.js info",
+    "cache:list": "node scripts/cache-manager.js list",
     "test:cache": "node scripts/test-cache.js",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
