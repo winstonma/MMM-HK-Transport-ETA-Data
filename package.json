@@ -38,6 +38,7 @@
     "keyv-file": "^5.3.3",
     "ky": "^2.0.2",
     "ora": "^5.4.1",
+    "p-retry": "^8.0.0",
     "p-throttle": "^8.1.0"
   },
   "devDependencies": {
