@@ -27,7 +27,7 @@ async function main() {
         if (error.details) {
           console.error('Details:', error.details);
         }
-        process.exit(1);
+        continue;
       }
 
       const data = result.unwrap();
@@ -41,7 +41,7 @@ async function main() {
       }
     } catch (error) {
       console.error(`Error in ${name} collection:`, error);
-      process.exit(1);
+      continue;
     }
   }
 
