@@ -5,6 +5,7 @@ const { KMBService } = require('./lib/kmb-service');
 const config = require('./config/default');
 
 async function main() {
+  let hasFailedCollections = false;
   const services = [
     { name: 'CTB', Service: CTBService, baseDir: config.output.baseDir },
     { name: 'KMB', Service: KMBService, baseDir: 'kmb' },
@@ -27,6 +28,7 @@ async function main() {
         if (error.details) {
           console.error('Details:', error.details);
         }
+        hasFailedCollections = true;
         continue;
       }
 
@@ -41,8 +43,14 @@ async function main() {
       }
     } catch (error) {
       console.error(`Error in ${name} collection:`, error);
+      hasFailedCollections = true;
       continue;
     }
+  }
+
+  if (hasFailedCollections) {
+    console.error('\n❌ Data collection completed, but one or more sources failed.');
+    process.exit(1);
   }
 
   console.log('\n✓ All data collected successfully');
